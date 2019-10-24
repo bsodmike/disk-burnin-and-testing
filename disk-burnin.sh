@@ -28,9 +28,10 @@
 #
 #   1> Run SMART short test
 #   2> Run SMART extended test
-#   3> Run badblocks
-#   4> Run SMART short test
-#   5> Run SMART extended test
+#   3> Run dd to write zeros to drive
+#   4> Run badblocks
+#   5> Run SMART short test
+#   6> Run SMART extended test
 #
 # The script sleeps after starting each SMART test, using a duration 
 # based on the polling interval reported by the disk, after which the
@@ -95,6 +96,7 @@
 #
 # Uses: grep, pcregrep, awk, sed, tr, sleep, badblocks
 #
+# Updated by Michael de Silva (michael@mwdesilva.com), October 2019
 # Written by Keith Nash, March 2017
 # 
 # KN, 8 Apr 2017:
@@ -295,6 +297,22 @@ run_badblocks_test()
   echo_str "Finished badblocks test on drive /dev/${Drive}: $(date)"
 }
 
+run_dd_zero_test()
+{
+  push_header
+  echo_str "+ Run dd to write zeros to drive /dev/${Drive}: $(date)"
+  push_header
+  if [ "${Dry_Run}" -eq 0 ]; then
+#
+#   This is the command which erases all data on the disk:
+#
+    dd bs=1M if=/dev/zero of=/dev/"$Drive" status=progress
+  else
+    echo_str "Dry run: would run dd bs=1M if=/dev/zero of=/dev/${Drive} status=progress"
+  fi
+  echo_str "Finished writing zeros to drive /dev/${Drive}: $(date)"
+}
+
 ########################################################################
 #
 # Action begins here
@@ -322,6 +340,7 @@ echo_str "Bad blocks file: ${BB_File}"
 # Run the test sequence:
 run_short_test
 run_extended_test
+run_dd_zero_test
 run_badblocks_test
 run_short_test
 run_extended_test
