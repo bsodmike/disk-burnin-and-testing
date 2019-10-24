@@ -10,10 +10,11 @@ Be aware that:
 Performs these steps:                                                      
                                                                            
 1. Run SMART short test                                                  
-2. Run SMART extended test                                               
-3. Run `badblocks`                                                         
-4. Run SMART short test                                                  
-5. Run SMART extended test                                               
+2. Run SMART extended test
+3. Run dd to write zeros to drive
+4. Run `badblocks`
+5. Run SMART short test
+6. Run SMART extended test
                                                                            
 The script sleeps after starting each SMART test, using a duration based on the polling interval reported by the disk, and adding an additional delay to account for discrepancies.               
                                                                            
@@ -66,4 +67,5 @@ Uses: `grep`, `pcregrep`, `awk`, `sed`, `tr`, `sleep`, `badblocks`
 
 Tested with the static analysis tool at https://www.shellcheck.net to insure that the code is POSIX-compliant and free of issues.
 
+Updated by Michael de Silva (michael@mwdesilva.com), October 2019
 Written by Keith Nash, March 2017.                                                                         
