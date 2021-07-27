@@ -145,6 +145,8 @@ Dry_Run=1
 Log_Dir="."
 BB_Dir="."
 
+NOW=`date +"%d%m%Y_%H%M_%z"`
+
 ########################################################################
 #
 # Prologue
@@ -163,10 +165,10 @@ Serial_Number=$(smartctl -i /dev/"$Drive" | grep "Serial Number" | awk '{print $
 
 # Form the log and bad blocks data filenames:
 
-Log_File="burnin-${Disk_Model}_${Serial_Number}.log"
+Log_File="burnin-${Disk_Model}_${Serial_Number}_${NOW}.log"
 Log_File=$Log_Dir/$Log_File
 
-BB_File="burnin-${Disk_Model}_${Serial_Number}.bb"
+BB_File="burnin-${Disk_Model}_${Serial_Number}_${NOW}.bb"
 BB_File=$BB_Dir/$BB_File
 
 # Query the short and extended test duration, in minutes. Use the values to
