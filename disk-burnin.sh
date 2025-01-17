@@ -135,7 +135,7 @@ Drive=$1
 # Set Dry_Run to a non-zero value to test out the script without actually
 # running any tests: set it to zero when you are ready to burn-in disks.
 
-Dry_Run=1
+Dry_Run=0
 
 # Directory specifiers for log and badblocks data files. Leave off the
 # trailing slash:
@@ -300,15 +300,15 @@ run_badblocks_test()
 run_shred()
 {
   push_header
-  echo_str "+ Run shred to wipe drive /dev/${Drive}: $(date)"
+  echo_str "+ Run shred to wipe drive (7-passes) /dev/${Drive}: $(date)"
   push_header
   if [ "${Dry_Run}" -eq 0 ]; then
 #
 #   This is the command which erases all data on the disk:
 #
-    shred -v -n1 -z /dev/"$Drive"
+    shred -v -n7 -z /dev/"$Drive"
   else
-    echo_str "Dry run: would run shred -v -n1 -z /dev/${Drive}"
+    echo_str "Dry run: would run shred -v -n7 -z /dev/${Drive}"
   fi
   echo_str "Finished wiping drive with shred drive /dev/${Drive}: $(date)"
 }
@@ -354,13 +354,18 @@ echo_str "Log file: ${Log_File}"
 echo_str "Bad blocks file: ${BB_File}"
 
 # Run the test sequence:
-run_short_test
+#run_short_test
 #run_extended_test
-run_shred
-run_dd_zero_test
+#run_shred
+#run_dd_zero_test
 #run_badblocks_test
 #run_short_test
 #run_extended_test
+
+# Shred to wipe disk
+run_short_test
+run_shred # 7-pass wipe
+run_dd_zero_test
 
 # Emit full device information to log:
 push_header
